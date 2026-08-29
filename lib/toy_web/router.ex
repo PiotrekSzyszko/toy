@@ -20,6 +20,7 @@ defmodule ToyWeb.Router do
     # get "/", PageController, :home
     live "/", PageLive, :home
     live "/other", OtherPageLive, :other
+    live "/blog/:slug", BlogLive, :index
   end
 
   # Other scopes may use custom stacks.
