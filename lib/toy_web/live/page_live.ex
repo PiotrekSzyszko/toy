@@ -3,12 +3,20 @@ defmodule ToyWeb.PageLive do
 
   def render(assigns) do
     ~H"""
-    <.mój_przycisk color="blue">Default</.mój_przycisk>
-    <.mój_przycisk color="green">Zielony</.mój_przycisk>
-    <.mój_przycisk color="red">Czerwony</.mój_przycisk>
-    <.mój_przycisk color="yellow">Żółty</.mój_przycisk>
+    <.mój_przycisk>Akceptuj</.mój_przycisk>
     """
   end
+
+  @doc """
+  Renderuje przycisk
+
+  ## Przykład
+
+      <.mój_przycisk>Usuń konto!</.mój_przycisk>
+      <.mój_przycisk color="red">Usuń konto</.mój_przycisk>
+  """
+  attr :color, :string, default: "blue"
+  slot :inner_block, required: true
 
   def mój_przycisk(assigns) do
     ~H"""
