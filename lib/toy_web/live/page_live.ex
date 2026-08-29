@@ -2,49 +2,52 @@ defmodule ToyWeb.PageLive do
   use ToyWeb, :live_view
 
   def mount(_params, _session, socket) do
-    socket = assign(socket, zakładka: "home")
+    socket = assign(socket, temperatura_C: 30)
     {:ok, socket}
   end
 
   def render(assigns) do
     ~H"""
+    <h1 class="text-3xl">Aktualna temperatura: {@temperatura_C} C</h1>
     <div>
-      <%= case @zakładka do %>
-        <% "home" -> %>
-          <p>Jesteś na stronie głównej</p>
-        <% "about" -> %>
-          <p>Jesteś na stronie o mnie</p>
-        <% "contact" -> %>
-          <p>Napisz do mnie małpa@małpa.com</p>
+      <%= cond do %>
+        <% @temperatura_C > 40 -> %>
+          <p>🔥 Upał niemożliwy do życia 🔥</p>
+        <% @temperatura_C > 30 -> %>
+          <p>Jest gorąco</p>
+        <% @temperatura_C > 20 -> %>
+          <p>Idealnie</p>
+        <% @temperatura_C > 10 -> %>
+          <p>Chłodnawo</p>
+        <% @temperatura_C > 0 -> %>
+          <p>Zimno</p>
+        <% true -> %>
+          <p>❄️⛄️</p>
       <% end %>
     </div>
 
     <.button
-      disabled={@zakładka == "home"}
-      phx-click="show_home"
-      class="btn btn-primary"
+      phx-click="zwiększaTemp"
+      class="btn btn-danger"
     >
-      Główna
+      Zwiększ
     </.button>
     <.button
-      disabled={@zakładka == "about"}
-      phx-click="show_about"
-      class="btn btn-info"
-    >
-      O mnie
-    </.button>
-    <.button
-      disabled={@zakładka == "contact"}
-      phx-click="show_contact"
+      phx-click="zmniejszaTemp"
       class="btn btn-success"
     >
-      Kontakt
+      Zmniejsz
     </.button>
     """
   end
 
-  def handle_event("show_" <> zakładka, _params, socket) do
-    socket = assign(socket, zakładka: zakładka)
+  def handle_event("zwiększaTemp", _params, socket) do
+    socket = update(socket, :temperatura_C, &(&1 + 10))
+    {:noreply, socket}
+  end
+
+  def handle_event("zmniejszaTemp", _params, socket) do
+    socket = update(socket, :temperatura_C, &(&1 - 10))
     {:noreply, socket}
   end
 end
